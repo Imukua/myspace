@@ -1,138 +1,200 @@
 export const activities = [
   {
-    title: "OPEN SOURCE",
-    description:
-      "Contributing to React and Next.js ecosystem projects, focusing on performance and accessibility improvements.",
-    details: [
-      "Maintaining 3 popular npm packages with over 50k weekly downloads",
-      "Regular contributor to React and Next.js documentation",
-      "Created developer tools used by thousands of developers",
-    ],
+      title: "OPEN SOURCE",
+      description:
+          "Currently focusing on testing and exploring various open source tools and technologies. Contibuting soon",
+      details: [
+          "Experimenting with network solutions like Tailscale",
+          "Testing containerization with Docker",
+          "Exploring capabilities of open source AI models like DeepSeek",
+      ],
   },
   {
-    title: "LEARNING",
-    description: "Currently exploring Rust and WebAssembly to build high-performance web applications and tools.",
-    details: [
-      "Building a WebAssembly-powered image processing library",
-      "Learning systems programming with Rust",
-      "Experimenting with AI and machine learning applications",
-    ],
+      title: "LEARNING",
+      description: "Currently exploring Rust and WebAssembly to build high-performance web applications and tools.",
+      details: [
+          "Building a WebAssembly-powered image processing library",
+          "Learning systems programming with Rust",
+          "Experimenting with AI and machine learning applications",
+      ],
   },
   {
-    title: "WRITING",
-    description: "Publishing technical articles on modern web development, focusing on performance and best practices.",
-    details: [
-      "Regular contributor to web development publications",
-      "Writing a book on Next.js application architecture",
-      "Sharing insights on personal technical blog",
-    ],
+      title: "WRITING",
+      description: "Publishing technical articles on modern web development, focusing on performance and best practices.",
+      details: [
+          "Regular contributor to web development publications",
+          "Writing a book on Next.js application architecture",
+          "Sharing insights on personal technical blog",
+      ],
   },
   {
-    title: "SPEAKING",
-    description:
-      "Delivering conference talks and workshops on frontend architecture, state management, and performance.",
-    details: [
-      "Presented at 5 international conferences in the past year",
-      "Running monthly workshops on advanced React patterns",
-      "Guest lecturer for web development courses",
-    ],
+      title: "READING", // Changed from SPEAKING
+      description:
+          "Actively engaging with various reading materials to expand knowledge and perspectives in.",
+      details: [
+          "Enjoying reading Manga series",
+          "Reading 'Atomic Habits' for personal development",
+          "Exploring technical and non-technical books",
+          "Reading 'The Pragmatic Programmer' for software development insights",
+      ],
   },
-]
+];
 
 export const interests = [
-  "generative art",
-  "electronic music",
+  "Home networking",
+  "Solar setup",
   "mechanical keyboards",
-  "creative coding",
+  "Vibe Coding",
   "new technologies",
 ]
 
 export const currentlyWatching = [
   {
-    title: "Succession",
+    title: "The Last of Us",
     network: "HBO",
-    genre: "Drama, Comedy",
-    year: "2018-2023",
-    episodes: "40",
-    status: "Completed",
-    rating: "9.4",
+    genre: "Drama, Action",
+    year: "2023–present",
+    episodes: "14",
+    status: "Ongoing",
+    rating: "9.2",
     description:
-      "The Roy family is known for controlling the biggest media and entertainment company in the world. However, their world changes when their father steps down from the company.",
-    image: "/placeholder.svg?height=240&width=180",
+      "In a post-apocalyptic world, Joel and Ellie navigate dangerous territories and confront their pasts as they seek hope and survival.",
+    image: "/images/shows/the-last-of-us.png",
   },
   {
-    title: "The Bear",
-    network: "FX",
-    genre: "Comedy, Drama",
-    year: "2022-Present",
-    episodes: "18",
+    title: "When Life Gives You Tangerines",
+    network: "Netflix",
+    genre: "Romance, Slice-of-Life",
+    year: "2025",
+    episodes: "8",
+    status: "Completed",
+    rating: "8.3",
+    description:
+      "Set in Jeju Island, this heartfelt series follows the lives and dreams of young adults navigating love and life's challenges.",
+    image: "/images/shows/when-life-gives-you-tangerines.png",
+  },
+  {
+    title: "Family Guy",
+    network: "FOX",
+    genre: "Comedy, Animation",
+    year: "1999–present",
+    episodes: "400+",
     status: "Ongoing",
+    rating: "8.1",
+    description:
+      "The satirical adventures of Peter Griffin and his oddball family in Quahog.",
+    image: "/images/shows/family-guy.png",
+  },
+  {
+    title: "Andor",
+    network: "Disney+",
+    genre: "Sci-Fi, Thriller",
+    year: "2022–2025",
+    episodes: "24",
+    status: "Completed",
+    rating: "8.4",
+    description:
+      "A prequel to Star Wars: Rogue One, following Cassian Andor's journey through the early days of the rebellion.",
+    image: "/images/shows/andor.png",
+  },
+  {
+    title: "Solo Leveling",
+    network: "Crunchyroll",
+    genre: "Action, Fantasy, Anime",
+    year: "2024",
+    episodes: "12",
+    status: "Completed",
+    rating: "8.7",
+    description:
+      "A low-ranked hunter gains powers and rises through the ranks to become unstoppable.",
+    image: "/images/shows/solo-leveling.png",
+  },
+  {
+    title: "The Cleaning Lady",
+    network: "FOX",
+    genre: "Drama, Crime",
+    year: "2022–present",
+    episodes: "26",
+    status: "Ongoing",
+    rating: "7.0",
+    description:
+      "A doctor turned cleaning lady gets entangled in a criminal underworld to save her son.",
+    image: "/images/shows/the-cleaning-lady.png",
+  },
+  {
+    title: "Fresh Off the Boat",
+    network: "ABC",
+    genre: "Comedy",
+    year: "2015–2020",
+    episodes: "116",
+    status: "Completed",
+    rating: "7.8",
+    description:
+      "A Taiwanese-American family navigates life in 1990s Florida with humor and heart.",
+    image: "/images/shows/fresh-off-the-boat.png",
+  },
+  {
+    title: "Suits LA",
+    network: "NBCUniversal",
+    genre: "Drama",
+    year: "2025",
+    episodes: "TBA",
+    status: "Upcoming",
+    rating: "TBA",
+    description:
+      "A spin-off of Suits following new legal drama and power struggles on the West Coast.",
+    image: "/images/shows/suits-la.png",
+  },
+  {
+    title: "Dexter",
+    network: "Showtime",
+    genre: "Crime, Drama",
+    year: "2006–2013",
+    episodes: "96",
+    status: "Completed",
     rating: "8.6",
     description:
-      "A young chef from the fine dining world returns to Chicago to run his family's sandwich shop after the death of his brother.",
-    image: "/placeholder.svg?height=240&width=180",
+      "Dexter Morgan leads a double life as a blood spatter expert and a serial killer targeting criminals.",
+    image: "/images/shows/dexter.png",
   },
   {
-    title: "Severance",
-    network: "Apple TV+",
-    genre: "Sci-Fi, Thriller",
-    year: "2022-Present",
-    episodes: "9",
+    title: "Dan Da Dan",
+    network: "Netflix, Crunchyroll",
+    genre: "Action, Romantic Comedy, Supernatural Thriller",
+    year: "2024–present",
+    episodes: "12",
     status: "Ongoing",
-    rating: "8.7",
-    description:
-      "Mark leads a team of office workers whose memories have been surgically divided between their work and personal lives.",
-    image: "/placeholder.svg?height=240&width=180",
-  },
-  {
-    title: "Dark",
-    network: "Netflix",
-    genre: "Sci-Fi, Mystery",
-    year: "2017-2020",
-    episodes: "26",
-    status: "Completed",
-    rating: "8.7",
-    description:
-      "A family saga with a supernatural twist, set in a German town where the disappearance of two young children exposes the relationships among four families.",
-    image: "/placeholder.svg?height=240&width=180",
-  },
-  {
-    title: "Mr. Robot",
-    network: "USA Network",
-    genre: "Thriller, Drama",
-    year: "2015-2019",
-    episodes: "45",
-    status: "Completed",
     rating: "8.5",
     description:
-      "Elliot, a brilliant but highly unstable young cyber-security engineer and vigilante hacker, becomes a key figure in a complex game of global dominance.",
-    image: "/placeholder.svg?height=240&width=180",
+      "Teenagers Momo and Okarun battle supernatural threats and mysterious phenomena while navigating their budding relationship.",
+    image: "/images/shows/dan-da-dan.png",
   },
   {
-    title: "Better Call Saul",
-    network: "AMC",
-    genre: "Crime, Drama",
-    year: "2015-2022",
-    episodes: "63",
-    status: "Completed",
-    rating: "8.9",
+    title: "MobLand",
+    network: "Paramount+",
+    genre: "Crime, Thriller",
+    year: "2025",
+    episodes: "10",
+    status: "Upcoming",
+    rating: "TBA",
     description:
-      "The trials and tribulations of criminal lawyer Jimmy McGill before his transformation into Saul Goodman, the man who puts the 'criminal' in 'criminal lawyer'.",
-    image: "/placeholder.svg?height=240&width=180",
+      "A gritty crime story of power, corruption, and survival in an unforgiving world.",
+    image: "/images/shows/mobland.png",
   },
   {
-    title: "Stranger Things",
-    network: "Netflix",
-    genre: "Sci-Fi, Horror",
-    year: "2016-Present",
-    episodes: "34",
+    title: "Power Book III: Raising Kanan",
+    network: "Starz",
+    genre: "Drama, Crime",
+    year: "2021–present",
+    episodes: "30",
     status: "Ongoing",
-    rating: "8.7",
+    rating: "7.5",
     description:
-      "When a young boy disappears, his mother, a police chief, and his friends must confront terrifying supernatural forces in order to get him back.",
-    image: "/placeholder.svg?height=240&width=180",
-  },
+      "A prequel to Power, following the early years of Kanan Stark’s rise in South Jamaica, Queens.",
+    image: "/images/shows/power-book-III.png",
+  }
 ]
+
 
 export const currentlyListening = [
   {
