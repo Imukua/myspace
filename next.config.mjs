@@ -11,7 +11,7 @@ const nextConfig = {
     domains: ['v0.blob.com'],
     unoptimized: true,
     formats: ['image/webp'],
-    quality: 100,
+
   },
 };
 
