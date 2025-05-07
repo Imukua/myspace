@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ExternalLink, Github, ChevronDown, ChevronUp, Plus, Minus, Filter, X } from "lucide-react"
+import Image from "next/image"
 import { projects } from "@/data/projects"
 import { techColors } from "@/data/tech-colors"
 import TechBadge from "@/components/tech-badge"
@@ -10,19 +11,6 @@ import TechBadge from "@/components/tech-badge"
 // Image loader component with placeholder animation
 const ImageLoader = ({ src, alt }: { src: string; alt: string }) => {
   const [isLoaded, setIsLoaded] = useState(false)
-  const [isError, setIsError] = useState(false)
-
-  useEffect(() => {
-    const img = new Image()
-    img.src = src
-    img.onload = () => setIsLoaded(true)
-    img.onerror = () => setIsError(true)
-
-    return () => {
-      img.onload = null
-      img.onerror = null
-    }
-  }, [src])
 
   return (
     <div className="relative w-full h-full">
@@ -36,13 +24,16 @@ const ImageLoader = ({ src, alt }: { src: string; alt: string }) => {
       )}
 
       {/* Actual image with fade-in effect */}
-      <img
-        src={isError ? "/placeholder.svg?height=100&width=200" : src}
-        alt={alt}
-        className={`w-full h-full object-cover transition-opacity duration-500 ${
-          isLoaded ? "opacity-100" : "opacity-0"
-        } hover:scale-105 transition-transform duration-300`}
-      />
+      <div className={`w-full h-full transition-opacity duration-500 ${isLoaded ? "opacity-100" : "opacity-0"}`}>
+        <Image
+          src={src || "/placeholder.svg"}
+          alt={alt}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover hover:scale-105 transition-transform duration-300"
+          onLoad={() => setIsLoaded(true)}
+        />
+      </div>
     </div>
   )
 }
@@ -245,7 +236,7 @@ const ProjectsSection = () => {
                 </div>
 
                 {project.image && (
-                  <div className="mb-3 border border-gray-800 overflow-hidden h-24">
+                  <div className="mb-3 border border-gray-800 overflow-hidden h-24 relative">
                     <ImageLoader src={project.image || "/placeholder.svg"} alt={`Screenshot of ${project.title}`} />
                   </div>
                 )}
