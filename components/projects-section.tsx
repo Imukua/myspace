@@ -1,11 +1,51 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ExternalLink, Github, ChevronDown, ChevronUp, Plus, Minus, Filter, X } from "lucide-react"
 import { projects } from "@/data/projects"
 import { techColors } from "@/data/tech-colors"
 import TechBadge from "@/components/tech-badge"
+
+// Image loader component with placeholder animation
+const ImageLoader = ({ src, alt }: { src: string; alt: string }) => {
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [isError, setIsError] = useState(false)
+
+  useEffect(() => {
+    const img = new Image()
+    img.src = src
+    img.onload = () => setIsLoaded(true)
+    img.onerror = () => setIsError(true)
+
+    return () => {
+      img.onload = null
+      img.onerror = null
+    }
+  }, [src])
+
+  return (
+    <div className="relative w-full h-full">
+      {/* Placeholder with pulsing animation */}
+      {!isLoaded && (
+        <div className="absolute inset-0 bg-gray-900 overflow-hidden">
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="animate-pulse-slow w-full h-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 background-animate"></div>
+          </div>
+        </div>
+      )}
+
+      {/* Actual image with fade-in effect */}
+      <img
+        src={isError ? "/placeholder.svg?height=100&width=200" : src}
+        alt={alt}
+        className={`w-full h-full object-cover transition-opacity duration-500 ${
+          isLoaded ? "opacity-100" : "opacity-0"
+        } hover:scale-105 transition-transform duration-300`}
+      />
+    </div>
+  )
+}
 
 const ProjectsSection = () => {
   const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({})
@@ -206,11 +246,7 @@ const ProjectsSection = () => {
 
                 {project.image && (
                   <div className="mb-3 border border-gray-800 overflow-hidden h-24">
-                    <img
-                      src={project.image || "/placeholder.svg"}
-                      alt={`Screenshot of ${project.title}`}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
+                    <ImageLoader src={project.image || "/placeholder.svg"} alt={`Screenshot of ${project.title}`} />
                   </div>
                 )}
 

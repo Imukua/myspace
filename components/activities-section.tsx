@@ -96,14 +96,16 @@ const ActivityCard = ({ activity, index }: { activity: (typeof activities)[0]; i
             </h3>
             {activity.title === "WRITING" && (
               <a
-                href="https://blog.mukua.dev" // Replace with your actual blog URL
+                href="https://yourblog.com" // Replace with your actual blog URL
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center text-xs px-2 py-1 bg-[#61dafb20] text-[#61dafb] hover:bg-[#61dafb30] transition-colors rounded-sm"
+                className="inline-flex items-center text-[10px] sm:text-xs px-2 py-0.5 sm:py-1 bg-[#61dafb20] text-[#61dafb] hover:bg-[#61dafb30] transition-colors rounded-sm"
               >
-                <Book size={12} className="mr-1" />
+                <Book size={10} className="mr-1 sm:hidden" />
+                <Book size={12} className="mr-1 hidden sm:block" />
                 <span>MY BLOG</span>
-                <ExternalLink size={12} className="ml-1" />
+                <ExternalLink size={10} className="ml-1 sm:hidden" />
+                <ExternalLink size={12} className="ml-1 hidden sm:block" />
               </a>
             )}
           </div>
@@ -163,7 +165,7 @@ const MediaItem = ({ item, index, type, onSelect }: MediaItemProps) => {
                 style={{ backgroundColor: `${color}30`, color }}
               >
                 {icon}
-                <span className="ml-1">{isWatching && "network" in item ? item.network : "TRACK"}</span>
+                <span className="ml-1">{isWatching  && "network" in item ? item.network : "TRACK"}</span>
               </div>
 
               {item.rating && (
