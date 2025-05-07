@@ -10,9 +10,9 @@ export const techColors: Record<string, string> = {
   webassembly: "#654ff0", // Keeping existing colors
   mongodb: "#47a248",
   postgresql: "#336791",
-  express: "#000000", // Often represented by black
+  express: "#ff6347", // Changed to Tomato Red for better visibility
   stripe: "#008cdd", // Keeping existing colors
-  prisma: "#2d3748",
+  prisma: "#6c63ff", // Changed to a unique Indigo color
   openai: "#10a37f", // Keeping existing colors
   "framer motion": "#0055ff",
   default: "#ffffff",
@@ -24,9 +24,8 @@ export const techColors: Record<string, string> = {
   sqlalchemy: "#a0a0a0", // Neutral color for SQLAlchemy
   html: "#E34F26", // HTML5 branding color
   css: "#1572B6", // CSS3 branding color
-  nginx: "#333333", // Common representation for NGINX
+  nginx: "#32cd32", // Changed to Lime Green for better visibility
   nestjs: "#009cc5", // NestJS branding color
   "jwt authentication": "#007bff", // Common color for authentication/security
   zustand: "#e0f2f7", // Light neutral color for Zustand
-
 };
