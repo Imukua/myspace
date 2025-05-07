@@ -2,8 +2,8 @@ export const personalInfo = {
   name: "Ian Mukua",
   title: "Software Developer",
   location: "Nairobi, Kenya",
-  bio: "A software developer blending a biotech background with a passion for building reliable systems and exploring cloud technologies. I enjoy collaborative problem-solving and am driven by continuous learning and creating impactful software.",
+  bio: "Driven by curiosity and a deep appreciation for clean, scalable systems, I craft software that’s both robust and intuitive. My journey from biotechnology into software development has sharpened my ability to think analytically and build with empathy. I thrive in environments where learning never stops, ideas evolve through collaboration, and code becomes a tool for meaningful impact.",
   description:
-      "I enjoy building digital products that combine beautiful interfaces with well-architected codebases. My approach emphasizes simplicity, usability, and attention to detail.",
-  keyTechnologies: ["Next.js", "React", "TypeScript", "Node.js", "PostgreSQL", "MongoDB", "AWS", "Docker"],
+    "I build digital experiences that feel effortless—focusing on clean architecture, thoughtful user interactions, and long-term maintainability. Whether it's crafting backend logic or refining frontend details, I believe great software is built through clarity, consistency, and care.",
+  keyTechnologies: ["Next.js", "React", "TypeScript", "Node.js", "PostgreSQL", "MongoDB", "AWS", "Docker", "Python"],
 }
