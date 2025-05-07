@@ -26,6 +26,7 @@ import {
   X,
   Book,
 } from "lucide-react"
+import Image from "next/image"
 import { activities, currentlyWatching, type currentlyListening } from "@/data/activities"
 
 const ActivityCard = ({ activity, index }: { activity: (typeof activities)[0]; index: number }) => {
@@ -139,6 +140,7 @@ const MediaItem = ({ item, index, type, onSelect }: MediaItemProps) => {
   const color = isWatching ? "#e44d26" : "#1DB954"
   const bgColor = isWatching ? "#2d1b18" : "#132218"
   const icon = isWatching ? <Tv size={14} /> : <Music size={14} />
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
     <motion.div
@@ -151,21 +153,35 @@ const MediaItem = ({ item, index, type, onSelect }: MediaItemProps) => {
     >
       <div className="relative overflow-hidden rounded-lg cursor-pointer" style={{ backgroundColor: bgColor }}>
         <div className="aspect-[3/4] w-full relative">
-          <img
+          {/* Placeholder with pulsing animation */}
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-gray-900 overflow-hidden z-10">
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="animate-pulse-slow w-full h-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 background-animate"></div>
+              </div>
+            </div>
+          )}
+
+          <Image
             src={item.image || "/placeholder.svg"}
             alt={item.title}
-            className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+            fill
+            sizes="(max-width: 768px) 160px, 160px"
+            className={`object-cover opacity-80 group-hover:opacity-100 transition-opacity ${
+              imageLoaded ? "opacity-80" : "opacity-0"
+            }`}
+            onLoad={() => setImageLoaded(true)}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-20"></div>
 
-          <div className="absolute bottom-0 left-0 right-0 p-3">
+          <div className="absolute bottom-0 left-0 right-0 p-3 z-30">
             <div className="flex items-center space-x-1 mb-1">
               <div
                 className="text-xs px-1.5 py-0.5 rounded-sm flex items-center"
                 style={{ backgroundColor: `${color}30`, color }}
               >
                 {icon}
-                <span className="ml-1">{isWatching  && "network" in item ? item.network : "TRACK"}</span>
+                <span className="ml-1">{isWatching && "network" in item ? item.network : "TRACK"}</span>
               </div>
 
               {item.rating && (
@@ -184,7 +200,7 @@ const MediaItem = ({ item, index, type, onSelect }: MediaItemProps) => {
         </div>
       </div>
 
-      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-40">
         <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: color }}>
           <Play size={18} fill="black" className="text-black ml-1" />
         </div>
@@ -200,6 +216,7 @@ const MediaDetailModal = ({
 }: { item: any; type: "watching" | "listening"; onClose: () => void }) => {
   const isWatching = type === "watching"
   const color = isWatching ? "#e44d26" : "#1DB954"
+  const [imageLoaded, setImageLoaded] = useState(false)
 
   return (
     <motion.div
@@ -217,16 +234,36 @@ const MediaDetailModal = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative h-64">
-          <img src={item.image || "/placeholder.svg"} alt={item.title} className="w-full h-full object-cover" />
+          {/* Placeholder with pulsing animation */}
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-gray-900 overflow-hidden z-10">
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="animate-pulse-slow w-full h-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 background-animate"></div>
+              </div>
+            </div>
+          )}
+
+          <div className="relative w-full h-full">
+            <Image
+              src={item.image || "/placeholder.svg"}
+              alt={item.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 600px"
+              className={`object-cover transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
+              onLoad={() => setImageLoaded(true)}
+              priority
+            />
+          </div>
+
           <button
             onClick={onClose}
-            className="absolute top-2 right-2 bg-black/50 rounded-full p-1 hover:bg-black/80 transition-colors"
+            className="absolute top-2 right-2 bg-black/50 rounded-full p-1 hover:bg-black/80 transition-colors z-30"
           >
             <X size={18} />
           </button>
-          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent z-20"></div>
 
-          <div className="absolute bottom-0 left-0 right-0 p-4">
+          <div className="absolute bottom-0 left-0 right-0 p-4 z-30">
             <div className="flex items-center space-x-2 mb-1">
               <div
                 className="text-xs px-2 py-1 rounded flex items-center"
