@@ -6,6 +6,7 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { socialLinks } from "@/data/social-links"
 import { Send } from "lucide-react"
+import { sendEmail } from "@/lib/zoho"
 
 const LinksSection = () => {
   const [formData, setFormData] = useState({
@@ -24,29 +25,32 @@ const LinksSection = () => {
       [name]: value,
     }))
   }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setSubmitStatus("success")
-
-      // Reset form
-      setFormData({
-        name: "",
-        contact: "",
-        message: "",
-      })
-
-      // Reset status after 3 seconds
-      setTimeout(() => {
-        setSubmitStatus(null)
-      }, 3000)
-    }, 1000)
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+  
+    try {
+      const response= await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: formData.name, contact: formData.contact, message: formData.message }),
+      });  
+      
+      const data: { success: boolean; error?: string } = await response.json();
+  
+      if (response.ok && data.success) {
+        setFormData({ name: "", contact: "", message: "" }); // Reset form
+        setSubmitStatus("success");
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-8 w-full">
