@@ -8,10 +8,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ['v0.blob.com'],
     unoptimized: true,
-    formats: ['image/webp'],
-
   },
 };
 
