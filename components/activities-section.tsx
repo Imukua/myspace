@@ -465,22 +465,6 @@ const InterestBadge = ({ interest, icon, index }: { interest: string; icon: Reac
 const ActivitiesSection = () => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-10 w-full">
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="flex flex-col md:flex-row md:items-center md:justify-between"
-      >
-        <motion.h2 className="text-2xl font-bold">FEED</motion.h2>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="mt-2 md:mt-0 text-sm text-gray-400"
-        >
-          <span className="text-[#61dafb]">What I'm focused on</span> right now
-        </motion.div>
-      </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {activities.map((activity, index) => (
