@@ -69,15 +69,6 @@ const ExperienceSection = () => {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-10 w-full">
-      <motion.h2
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="text-2xl font-bold border-b border-white pb-2"
-      >
-        JOURNEY
-      </motion.h2>
-
       <div className="space-y-10">
         {/* Tech Experience Section */}
         <div className="space-y-6">
