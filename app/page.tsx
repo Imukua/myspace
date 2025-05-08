@@ -8,8 +8,7 @@ import ExperienceSection from "@/components/experience-section"
 import ProjectsSection from "@/components/projects-section"
 import LinksSection from "@/components/links-section"
 
-// Change this to try different navigation variants:
-// "default" | "spread" | "centered" | "right"
+
 const CURRENT_NAV_VARIANT = "default"
 
 export default function Home() {
@@ -34,7 +33,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen w-full bg-black text-white font-mono">
+    <main className="min-h-screen w-full bg-background text-foreground font-mono theme-transition">
       <div className="w-full h-full flex flex-col p-4 md:p-6 lg:p-8">
         <div className="w-full max-w-screen-xl mx-auto">
           <NavComponent

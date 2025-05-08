@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react"
 import { useMediaQuery } from "@/hooks/use-mobile"
 import { navigationItems } from "@/data/navigation"
 import Logo from "@/components/logo"
+import ThemeToggle from "@/components/theme-toggle"
 
 export type NavVariant = "default" | "spread" | "centered" | "right"
 
@@ -57,9 +58,10 @@ const NavComponent = ({
       {isMobile ? (
         <>
           <div className="flex-grow" />
+          <ThemeToggle className="mr-4" />
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="p-2 text-white hover:text-gray-300 transition-colors"
+            className="p-2 text-foreground hover:text-gray-300 transition-colors"
             aria-label="Toggle menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -71,7 +73,7 @@ const NavComponent = ({
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="absolute top-full left-0 right-0 mt-2 bg-black z-50 py-4"
+                className="absolute top-full left-0 right-0 mt-2 bg-background z-50 py-4"
               >
                 <div className="flex flex-col">
                   {navigationItems.map((section) => (
@@ -79,7 +81,9 @@ const NavComponent = ({
                       key={section.id}
                       onClick={() => handleSectionClick(section.id)}
                       className={`px-4 py-3 text-left text-lg flex items-center ${
-                        currentSection === section.id ? "text-white font-bold" : "text-gray-400 hover:text-white"
+                        currentSection === section.id
+                          ? "text-foreground font-bold"
+                          : "text-gray-400 hover:text-foreground"
                       } transition-colors`}
                     >
                       <section.icon size={18} className="mr-2" />
@@ -92,20 +96,24 @@ const NavComponent = ({
           </AnimatePresence>
         </>
       ) : (
-        <nav className={getNavClasses()}>
-          {navigationItems.map((section) => (
-            <button
-              key={section.id}
-              onClick={() => handleSectionClick(section.id)}
-              className={`text-lg flex items-center ${
-                currentSection === section.id ? "text-white font-bold" : "text-gray-400 hover:text-white"
-              } transition-colors`}
-            >
-              <section.icon size={18} className="mr-2" />
-              {section.label}
-            </button>
-          ))}
-        </nav>
+        <>
+          <nav className={getNavClasses()}>
+            {navigationItems.map((section) => (
+              <button
+                key={section.id}
+                onClick={() => handleSectionClick(section.id)}
+                className={`text-lg flex items-center ${
+                  currentSection === section.id ? "text-foreground font-bold" : "text-gray-400 hover:text-foreground"
+                } transition-colors`}
+              >
+                <section.icon size={18} className="mr-2" />
+                {section.label}
+              </button>
+            ))}
+          </nav>
+          <div className="flex-grow" />
+          <ThemeToggle />
+        </>
       )}
     </header>
   )
