@@ -101,16 +101,7 @@ const ProjectsSection = () => {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-6 w-full">
-      <div className="flex justify-between items-center">
-        <motion.h2
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-2xl font-bold border-b border-white pb-2"
-        >
-          EXHIBITS
-        </motion.h2>
-
+      <div className="flex justify-end items-center">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -144,7 +135,7 @@ const ProjectsSection = () => {
               {selectedFilters.length > 0 && (
                 <button
                   onClick={clearFilters}
-                  className="text-xs flex items-center text-gray-400 hover:text-white transition-colors"
+                  className="text-xs flex items-center text-gray-400 hover:text-foreground transition-colors"
                 >
                   <X size={12} className="mr-1" /> Clear all
                 </button>
