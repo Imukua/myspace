@@ -29,7 +29,7 @@ interface SessionRecord {
 }
 
 const RATE_LIMIT_WINDOW_MS = 60 * 1000;
-const MAX_REQUESTS_PER_WINDOW = 10;
+const MAX_REQUESTS_PER_WINDOW = 5;
 const SESSION_COOKIE_NAME = 'chat_session_id';
 const SESSION_COOKIE_EXPIRATION_SECONDS = 30 * 24 * 60 * 60;
 
