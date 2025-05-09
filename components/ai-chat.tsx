@@ -6,6 +6,10 @@ import { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Bot, X, Send, Minimize2, Maximize2, MessageCircle } from "lucide-react"
 
+// --- Import ReactMarkdown and remarkGfm ---
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
+
 interface Message {
   role: "user" | "assistant"
   content: string
@@ -78,7 +82,7 @@ const AiChat = () => {
     const userMessage: Message = { role: "user", content: userQuestion }
     setMessages((prev) => [...prev, userMessage])
     setInput("") // Clear input immediately
-    setError(null); // Clear previous errors
+    setError(null) // Clear previous errors
 
     setIsTyping(true) // Indicate AI is thinking
 
@@ -251,7 +255,21 @@ const AiChat = () => {
                           : "bg-gray-800 border border-gray-700"
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                      {/* --- Start of Change --- */}
+                      {message.role === "assistant" ? (
+                        <div className="prose dark:prose-invert max-w-none text-sm whitespace-pre-wrap">
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            // Apply typography classes for beautiful Markdown rendering
+                            // and keep original text styling
+                          >
+                            {message.content}
+                          </ReactMarkdown>
+                        </div>
+                      ) : (
+                        <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                      )}
+                      {/* --- End of Change --- */}
                     </div>
                   </div>
                 ))}
@@ -285,7 +303,7 @@ const AiChat = () => {
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Ask about John..."
+                    placeholder="Ask about John..." // Consider updating placeholder to be more general or specific to Ian
                     className="flex-grow p-2 bg-transparent border border-gray-700 rounded-l-md focus:outline-none focus:border-[#61dafb]"
                     disabled={isTyping} // Disable input while typing
                   />
