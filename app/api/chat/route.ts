@@ -8,7 +8,7 @@ import { experiences } from '@/data/experience';     // Adjust path if needed
 import { projects } from '@/data/projects';         // Adjust path if needed
 import { activities } from '@/data/activities';     // Adjust path if needed
 import { socialLinks } from '@/data/social-links';   // Adjust path if needed
-
+import { certifications } from '@/data/certifications';
 
 // Assuming 'interests' and 'currentlyWatching' are in separate files for clarity:
 import { interests } from '@/data/activities';
@@ -92,6 +92,12 @@ ${activity.details.map(detail => `  - ${detail}`).join('\n')}
 - **Description:** ${show.description}
     `).join('\n---\n');
 
+    // --- Format Certifications ---
+    const formattedCertifications = certifications.map(cert => `
+- **Title:** ${cert.name}
+- **Issuer:** ${cert.issuer}
+    `).join('\n---\n');
+
 
     // --- Combine all formatted data into a single context string for the AI ---
     const aboutMeData = `
@@ -118,6 +124,9 @@ ${activity.details.map(detail => `  - ${detail}`).join('\n')}
 
     ## Social Links:
     ${formattedSocialLinks}
+
+    ## Certifications:
+    ${formattedCertifications}
     `;
 
     // --- Construct the prompt for the Gemini API ---
