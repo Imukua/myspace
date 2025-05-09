@@ -205,3 +205,26 @@ button {
 .blue .bg-gradient-to-r.from-gray-900.via-gray-800.to-gray-900 {
   background-image: linear-gradient(to right, hsl(220, 70%, 15%), hsl(220, 70%, 20%), hsl(220, 70%, 15%));
 }
+
+/* Typing animation for chat */
+@keyframes typing-dot {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-typing-dot {
+  animation: typing-dot 1s infinite;
+}
+
+.delay-150 {
+  animation-delay: 0.15s;
+}
+
+.delay-300 {
+  animation-delay: 0.3s;
+}
