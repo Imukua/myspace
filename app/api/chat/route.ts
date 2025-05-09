@@ -1,20 +1,17 @@
-// app/api/chat/route.ts
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
-
-// Import all your data files
-import { personalInfo } from '@/data/personal-info'; // Adjust path if needed
-import { experiences } from '@/data/experience';     // Adjust path if needed
-import { projects } from '@/data/projects';         // Adjust path if needed
-import { activities } from '@/data/activities';     // Adjust path if needed
-import { socialLinks } from '@/data/social-links';   // Adjust path if needed
+import { cookies } from 'next/headers';
+import { v4 as uuidv4 } from 'uuid';
+import { personalInfo } from '@/data/personal-info';
+import { experiences } from '@/data/experience';
+import { projects } from '@/data/projects';
+import { activities } from '@/data/activities';
+import { socialLinks } from '@/data/social-links';
 import { certifications } from '@/data/certifications';
-
-// Assuming 'interests' and 'currentlyWatching' are in separate files for clarity:
 import { interests } from '@/data/activities';
 import { currentlyWatching } from '@/data/activities';
+import Redis from 'ioredis';
 
-// Access your API key as an environment variable.
 const API_KEY = process.env.GEMINI_API_KEY;
 
 if (!API_KEY) {
@@ -22,8 +19,19 @@ if (!API_KEY) {
 }
 
 const genAI = new GoogleGenerativeAI(API_KEY);
-// Using a robust model like gemini-1.5-flash for better performance and cost efficiency
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }); // Or "gemini-1.5-pro"
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
+
+interface SessionRecord {
+  count: number;
+  firstRequestTime: number;
+}
+
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 10;
+const SESSION_COOKIE_NAME = 'chat_session_id';
+const SESSION_COOKIE_EXPIRATION_SECONDS = 30 * 24 * 60 * 60;
 
 export async function POST(req: Request) {
   try {
@@ -33,7 +41,42 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid or missing 'question' in request body." }, { status: 400 });
     }
 
-    // --- Format Personal Information ---
+    const cookieStore = await cookies();
+    let sessionId = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+
+    if (!sessionId) {
+      sessionId = uuidv4();
+      cookieStore.set({
+        name: SESSION_COOKIE_NAME,
+        value: sessionId,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: SESSION_COOKIE_EXPIRATION_SECONDS,
+        path: '/',
+        sameSite: 'lax',
+      });
+    }
+
+    const currentTime = Date.now();
+    const redisKey = `rate_limit:${sessionId}`;
+    const recordStr = await redis.get(redisKey);
+    let record: SessionRecord = recordStr ? JSON.parse(recordStr) : { count: 0, firstRequestTime: currentTime };
+
+    if (currentTime - record.firstRequestTime > RATE_LIMIT_WINDOW_MS) {
+      record = { count: 1, firstRequestTime: currentTime };
+    } else {
+      record.count++;
+      if (record.count > MAX_REQUESTS_PER_WINDOW) {
+        const remainingTime = Math.ceil((record.firstRequestTime + RATE_LIMIT_WINDOW_MS - currentTime) / 1000);
+        await redis.setex(redisKey, remainingTime > 0 ? remainingTime : 1, JSON.stringify(record));
+        return NextResponse.json(
+          { error: `Too many requests. Please try again in ${remainingTime > 0 ? remainingTime : 1} seconds.` },
+          { status: 429 }
+        );
+      }
+    }
+
+    await redis.setex(redisKey, Math.ceil(RATE_LIMIT_WINDOW_MS / 1000), JSON.stringify(record));
     const formattedPersonalInfo = `
 Name: ${personalInfo.name}
 Title: ${personalInfo.title}
@@ -42,7 +85,11 @@ Description: ${personalInfo.description}
 Key Technologies: ${personalInfo.keyTechnologies.join(', ')}
     `;
 
-    // --- Format Experiences ---
+    const formattedCertifications = certifications.map(cert => `
+- **Certification:** ${cert.name}
+- **Issuer:** ${cert.issuer}
+    `).join('\n---\n');
+
     const formattedExperiences = experiences.map(exp => `
 - **Period:** ${exp.period}
 - **Company:** ${exp.company}
@@ -51,9 +98,8 @@ Key Technologies: ${personalInfo.keyTechnologies.join(', ')}
 - **Technologies:** ${exp.technologies.join(', ') || 'N/A'}
 - **Achievements:**
 ${exp.achievements.map(ach => `  - ${ach}`).join('\n')}
-    `).join('\n---\n'); // Add a separator between experiences for clarity
+    `).join('\n---\n');
 
-    // --- Format Projects ---
     const formattedProjects = projects.map(proj => `
 - **Title:** ${proj.title}
 - **Description:** ${proj.description}
@@ -64,12 +110,10 @@ ${exp.achievements.map(ach => `  - ${ach}`).join('\n')}
 ${proj.achievements.map(ach => `  - ${ach}`).join('\n')}
     `).join('\n---\n');
 
-    // --- Format Social Links (excluding UI components like 'icon' and 'color') ---
     const formattedSocialLinks = socialLinks.map(link => `
 - ${link.name}: ${link.url}
-    `).join(''); // No extra separator needed here, just a list
+    `).join('');
 
-    // --- Format Activities ---
     const formattedActivities = activities.map(activity => `
 - **Activity:** ${activity.title}
 - **Description:** ${activity.description}
@@ -77,10 +121,8 @@ ${proj.achievements.map(ach => `  - ${ach}`).join('\n')}
 ${activity.details.map(detail => `  - ${detail}`).join('\n')}
     `).join('\n---\n');
 
-    // --- Format Interests (assuming a simple array of strings) ---
-    const formattedInterests = interests.join(', '); // Simple comma-separated list
+    const formattedInterests = interests.join(', ');
 
-    // --- Format Currently Watching Shows ---
     const formattedCurrentlyWatching = currentlyWatching.map(show => `
 - **Title:** ${show.title}
 - **Network:** ${show.network}
@@ -92,14 +134,6 @@ ${activity.details.map(detail => `  - ${detail}`).join('\n')}
 - **Description:** ${show.description}
     `).join('\n---\n');
 
-    // --- Format Certifications ---
-    const formattedCertifications = certifications.map(cert => `
-- **Title:** ${cert.name}
-- **Issuer:** ${cert.issuer}
-    `).join('\n---\n');
-
-
-    // --- Combine all formatted data into a single context string for the AI ---
     const aboutMeData = `
     # About Ian Mukua
 
@@ -129,7 +163,6 @@ ${activity.details.map(detail => `  - ${detail}`).join('\n')}
     ${formattedCertifications}
     `;
 
-    // --- Construct the prompt for the Gemini API ---
     const prompt = `
     You are an AI assistant designed to answer questions about Ian Mukua.
     Here is factual information about Ian Mukua, his work, and his interests:
@@ -145,7 +178,6 @@ ${activity.details.map(detail => `  - ${detail}`).join('\n')}
     User's Question: ${question}
     `;
 
-    // --- Call the Gemini API ---
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
@@ -156,7 +188,6 @@ ${activity.details.map(detail => `  - ${detail}`).join('\n')}
     console.error("Full error details:", error);
     console.error("Error message:", error.message);
     console.error("Error name:", error.name);
-    // Return a generic error message to the client
     return NextResponse.json({ error: "Failed to get an answer from the AI. Please try again later." }, { status: 500 });
   }
 }
