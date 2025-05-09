@@ -97,7 +97,7 @@ const ActivityCard = ({ activity, index }: { activity: (typeof activities)[0]; i
             </h3>
             {activity.title === "WRITING" && (
               <a
-                href="https://yourblog.com" // Replace with your actual blog URL
+                href="https://blog.mukua.dev" // Replace with your actual blog URL
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center text-[10px] sm:text-xs px-2 py-0.5 sm:py-1 bg-[#61dafb20] text-[#61dafb] hover:bg-[#61dafb30] transition-colors rounded-sm"
