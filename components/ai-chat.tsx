@@ -18,12 +18,13 @@ const AiChat = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi there! I'm an AI assistant. Ask me anything about John Doe and his work!",
+      content: "Hi there! I'm lil-Ian. Ask me anything about Ian Mukua and his work!",
     },
   ])
   const [isTyping, setIsTyping] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
   const [hasAnimated, setHasAnimated] = useState(false)
+  const [error, setError] = useState<string | null>(null) // New state for error handling
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Auto-scroll to bottom of messages
@@ -68,34 +69,45 @@ const AiChat = () => {
     setIsMinimized(!isMinimized)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim()) return
 
-    // Add user message
-    const userMessage: Message = { role: "user", content: input }
+    const userQuestion = input.trim()
+    // Add user message to state
+    const userMessage: Message = { role: "user", content: userQuestion }
     setMessages((prev) => [...prev, userMessage])
-    setInput("")
+    setInput("") // Clear input immediately
+    setError(null); // Clear previous errors
 
-    // Simulate AI thinking
-    setIsTyping(true)
+    setIsTyping(true) // Indicate AI is thinking
 
-    // Simulate AI response after a delay
-    setTimeout(() => {
-      const responses = [
-        "I'm an AI assistant programmed to tell you about John Doe. He's a full-stack developer specializing in Next.js and React applications.",
-        "John has worked on several projects including e-commerce platforms and AI content generators. Check out the Projects section for more details!",
-        "John is currently learning Rust and WebAssembly. He's passionate about web performance and accessibility.",
-        "John has experience with technologies like React, TypeScript, Node.js, and TailwindCSS.",
-        "Feel free to ask me more specific questions about John's work or experience!",
-      ]
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question: userQuestion }),
+      });
 
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)]
-      const aiMessage: Message = { role: "assistant", content: randomResponse }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to get response from AI.');
+      }
 
-      setMessages((prev) => [...prev, aiMessage])
-      setIsTyping(false)
-    }, 1500)
+      const data = await response.json();
+      const aiMessage: Message = { role: "assistant", content: data.answer };
+      setMessages((prev) => [...prev, aiMessage]);
+
+    } catch (err: any) {
+      console.error("API call failed:", err);
+      setError(err.message || "Sorry, I couldn't get an answer right now. Please try again.");
+      // Optionally add a fallback message to the chat
+      setMessages((prev) => [...prev, { role: "assistant", content: "I'm having trouble connecting. Please try again later." }]);
+    } finally {
+      setIsTyping(false); // AI is done thinking
+    }
   }
 
   // Pulse animation variants
@@ -254,6 +266,13 @@ const AiChat = () => {
                     </div>
                   </div>
                 )}
+                {error && ( // Display error message if present
+                  <div className="flex justify-center">
+                    <p className="text-red-500 text-xs text-center p-2 rounded-md bg-red-900 bg-opacity-20 border border-red-700">
+                      {error}
+                    </p>
+                  </div>
+                )}
                 <div ref={messagesEndRef} />
               </div>
             )}
@@ -268,14 +287,15 @@ const AiChat = () => {
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask about John..."
                     className="flex-grow p-2 bg-transparent border border-gray-700 rounded-l-md focus:outline-none focus:border-[#61dafb]"
+                    disabled={isTyping} // Disable input while typing
                   />
                   <button
                     type="submit"
-                    disabled={!input.trim()}
+                    disabled={!input.trim() || isTyping} // Disable button while typing or no input
                     className={`p-2 rounded-r-md ${
-                      input.trim()
-                        ? "bg-[#61dafb] text-black hover:bg-[#4fa8c7]"
-                        : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                      !input.trim() || isTyping
+                        ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+                        : "bg-[#61dafb] text-black hover:bg-[#4fa8c7]"
                     } transition-colors`}
                     aria-label="Send message"
                   >
