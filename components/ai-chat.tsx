@@ -74,18 +74,18 @@ const AiChat = () => {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!input.trim()) return
-
-    const userQuestion = input.trim()
+    e.preventDefault();
+    if (!input.trim()) return;
+  
+    const userQuestion = input.trim();
     // Add user message to state
-    const userMessage: Message = { role: "user", content: userQuestion }
-    setMessages((prev) => [...prev, userMessage])
-    setInput("") // Clear input immediately
-    setError(null) // Clear previous errors
-
-    setIsTyping(true) // Indicate AI is thinking
-
+    const userMessage: Message = { role: "user", content: userQuestion };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput(""); // Clear input immediately
+    setError(null); // Clear previous errors
+  
+    setIsTyping(true); // Indicate AI is thinking
+  
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -94,26 +94,27 @@ const AiChat = () => {
         },
         body: JSON.stringify({ question: userQuestion }),
       });
-
+  
       if (!response.ok) {
         const errorData = await response.json();
+        // Set the specific error message from the API
         throw new Error(errorData.error || 'Failed to get response from AI.');
       }
-
+  
       const data = await response.json();
       const aiMessage: Message = { role: "assistant", content: data.answer };
       setMessages((prev) => [...prev, aiMessage]);
-
+  
     } catch (err: any) {
       console.error("API call failed:", err);
+      // Set the error state, which will be displayed by the {error && ...} block
       setError(err.message || "Sorry, I couldn't get an answer right now. Please try again.");
-      // Optionally add a fallback message to the chat
-      setMessages((prev) => [...prev, { role: "assistant", content: "I'm having trouble connecting. Please try again later." }]);
+      // REMOVE THE FOLLOWING LINE:
+      // setMessages((prev) => [...prev, { role: "assistant", content: "I'm having trouble connecting. Please try again later." }]);
     } finally {
       setIsTyping(false); // AI is done thinking
     }
-  }
-
+  };
   // Pulse animation variants
   const pulseVariants = {
     pulse: {
