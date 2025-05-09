@@ -7,6 +7,7 @@ import ActivitiesSection from "@/components/activities-section"
 import ExperienceSection from "@/components/experience-section"
 import ProjectsSection from "@/components/projects-section"
 import LinksSection from "@/components/links-section"
+import AiChat from "@/components/ai-chat"
 
 
 const CURRENT_NAV_VARIANT = "default"
@@ -44,6 +45,7 @@ export default function Home() {
         </div>
         <div className="mt-6 flex-grow w-full max-w-screen-xl mx-auto">{renderCurrentSection()}</div>
       </div>
+      <AiChat />
     </main>
   )
 }
